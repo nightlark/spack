@@ -34,11 +34,13 @@ class Swig(AutotoolsPackage):
     version('1.3.40', sha256='1945b3693bcda6777bd05fef1015a0ad1a4604cde4a4a0a368b61ccfd143ac09')
     version('fortran', branch='master',
             git='https://github.com/swig-fortran/swig.git')
+    version('matlab', branch='matlab',
+            git='https://github.com/jaeandersson/swig.git')
 
     depends_on('pcre')
 
     # Git repository does *not* include configure script
-    for _version in ['@fortran', '@master']:
+    for _version in ['@fortran', '@matlab', '@master']:
         depends_on('autoconf', type='build', when=_version)
         depends_on('automake', type='build', when=_version)
         depends_on('libtool', type='build', when=_version)
@@ -52,7 +54,7 @@ class Swig(AutotoolsPackage):
         with working_dir(self.prefix.bin):
             os.symlink('swig', 'swig{0}'.format(self.spec.version.up_to(2)))
 
-    for _version in ['@fortran', '@master']:
+    for _version in ['@fortran', '@matlab', '@master']:
         @when(_version)
         def autoreconf(self, spec, prefix):
             which('sh')('./autogen.sh')
